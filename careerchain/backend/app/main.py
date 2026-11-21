@@ -61,13 +61,22 @@ app.mount("/media", StaticFiles(directory=str(media_root)), name="media")
 
 # CORS Middleware
 origins = settings.cors_origins_list
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins if origins != ["*"] else ["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+if "*" in origins or origins == ["*"]:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origin_regex=r"^https?://.*",
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+else:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
 # API Routers Registration
 app.include_router(auth_router, prefix=settings.API_V1_STR)
