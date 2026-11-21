@@ -17,12 +17,13 @@ services:
         value: sqlite:///./careerchain.db
 
   # Frontend Web App (React / Vite)
-  - type: static_site
+  - type: web
     name: careerchain-frontend
+    runtime: static
     plan: free
     rootDir: careerchain/frontend
     buildCommand: npm install && npm run build
-    publishDir: dist
+    staticPublishPath: dist
     routes:
       - type: rewrite
         source: /*
