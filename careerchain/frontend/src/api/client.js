@@ -1,7 +1,16 @@
 import axios from 'axios';
 
-let rawUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1';
-if (rawUrl && !rawUrl.startsWith('http://') && !rawUrl.startsWith('https://')) {
+let rawUrl = import.meta.env.VITE_API_BASE_URL;
+
+if (!rawUrl || rawUrl === 'careerchain-backend' || rawUrl.includes('careerchain-backend/')) {
+  if (typeof window !== 'undefined' && window.location.hostname.includes('onrender.com')) {
+    rawUrl = 'https://careerchain-backend.onrender.com/api/v1';
+  } else {
+    rawUrl = 'http://localhost:8000/api/v1';
+  }
+}
+
+if (!rawUrl.startsWith('http://') && !rawUrl.startsWith('https://')) {
   rawUrl = `https://${rawUrl}`;
 }
 const API_BASE_URL = rawUrl.endsWith('/api/v1') ? rawUrl : `${rawUrl.replace(/\/+$/, '')}/api/v1`;
